@@ -16,7 +16,7 @@ fn main() -> Result<(), Error> {
 
     let debug = env::args().any(|arg| arg == "--debug");
 
-    let service_binary_path = std::env::current_exe()
+    let service_binary_path = env::current_exe()
         .unwrap()
         .with_file_name("clash-verge-service");
     let target_binary_path = "/Library/PrivilegedHelperTools/io.github.clashverge.helper";
@@ -90,7 +90,7 @@ fn main() -> Result<(), Error> {
 
     let debug = env::args().any(|arg| arg == "--debug");
 
-    let service_binary_path = std::env::current_exe()
+    let service_binary_path = env::current_exe()
         .unwrap()
         .with_file_name("clash-verge-service");
 
@@ -126,7 +126,6 @@ fn systemd_install<S: AsRef<str>>(service_binary_path: S, debug: bool) -> Result
     match status_output.status.code() {
         Some(0) => return Ok(()), // Service is running
         Some(1) | Some(2) | Some(3) => {
-            println!("Service exists but not running, attempting to start...");
             run_command(
                 "systemctl",
                 &["start", &format!("{}.service", SERVICE_NAME)],
@@ -236,7 +235,7 @@ fn main() -> windows_service::Result<()> {
         }
     }
 
-    let service_binary_path = std::env::current_exe()
+    let service_binary_path = env::current_exe()
         .unwrap()
         .with_file_name("clash-verge-service.exe");
 
